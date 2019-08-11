@@ -68,14 +68,18 @@ class Student {
     }
 
     static void display_companies(int roll_number) {
+        int flag = 0;
         for(Student s : students) {
             if(s.getRollNumber() == roll_number) {
+                flag = 1;
                 for(Score st: s.list_companies) {
-                    System.out.print(st.getCompany().getCompanyName());
+                    System.out.print(st.getCompany().getCompanyName()+" ");
                     System.out.println(st.getTechnical_score());
                 }
             }
-            return;
+        }
+        if(flag == 0) {
+            System.out.println("No student with the given roll number has an account");
         }
     }
 
@@ -133,7 +137,7 @@ class Student {
         System.out.println(this.getRollNumber());
         System.out.println(this.getCgpa());
         System.out.println(this.getCourse());
-        System.out.println(this.getPlacement_status());
+        System.out.println("Placement Status: "+this.getPlacement_status());
         if (this.is_placed()) {
             System.out.println(this.getCompany().getCompanyName());
         }
@@ -227,6 +231,7 @@ class Company {
     private void display() {
         System.out.println(this.getCompanyName());
         String[] courses = this.getCourses();
+        System.out.println("Course Criteria");
         for(int i=0;i<courses.length;i++) {
             System.out.println(courses[i]);
         }
@@ -259,6 +264,7 @@ class Company {
         LinkedList<Company> closed = new LinkedList<Company>();
         for(Company c : companies) {
             if(!c.is_open()) {
+                System.out.println("Accounts removed for");
                 System.out.println(c.getCompanyName());
                 closed.add(c);
             }
@@ -282,6 +288,8 @@ class Company {
             int max = i;
             for(int j=i+1;j<s.length;j++) {
                 if(s[j].getScore(company.getCompanyName())>s[max].getScore(company.getCompanyName())) {
+                    // System.out.println("Max-> "+s[max].getRollNumber());
+                    // System.out.println("Min-> "+s[j].getRollNumber());
                     max = j;
                 }
             }
@@ -289,21 +297,24 @@ class Company {
             s[max] = s[i];
             s[i] = temp;
         }
+        System.out.println("Roll Number of Selected Students");
         if(company.getRequiredStudents()<=s.length) {
-            company.setRequiredStudents();
-            company.setApplication_status();
             for(int i=0;i<company.getRequiredStudents();i++) {
+                System.out.println(s[i].getRollNumber());
                 s[i].setPlacement_status();
                 s[i].setCompany_placed(company);
             }
+            company.setRequiredStudents();
+            company.setApplication_status();
         }
         else{
-            company.setRequiredStudents();
-            company.setApplication_status();
             for(int i=0;i<s.length;i++) {
+                System.out.println(s[i].getRollNumber());
                 s[i].setPlacement_status();
                 s[i].setCompany_placed(company);
             }
+            company.setRequiredStudents();
+            company.setApplication_status();
         }
     }
 
@@ -338,6 +349,7 @@ public class Placement {
                     break;
                 
                 case 2 :
+                    System.out.println("Accounts removed for");
                     Student.remove_placed_students();
                     break;
 
@@ -356,7 +368,7 @@ public class Placement {
                 case 6 :
                     String company_name = q[1];
                     Company.select_students(company_name);
-                
+                    break;
                 case 7 :
                     String name = q[1];
                     Company.display(name);
