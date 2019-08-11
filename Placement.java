@@ -85,7 +85,7 @@ class Student {
 
     int getScore(String name) {
         for(Score s : list_companies) {
-            if(s.getCompany().equals(name)) {
+            if(s.getCompany().getCompanyName().equals(name)) {
                 return s.getTechnical_score();
             }
         }
@@ -288,8 +288,6 @@ class Company {
             int max = i;
             for(int j=i+1;j<s.length;j++) {
                 if(s[j].getScore(company.getCompanyName())>s[max].getScore(company.getCompanyName())) {
-                    // System.out.println("Max-> "+s[max].getRollNumber());
-                    // System.out.println("Min-> "+s[j].getRollNumber());
                     max = j;
                 }
             }
