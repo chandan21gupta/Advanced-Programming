@@ -287,7 +287,7 @@ class Company {
         for(int i=0;i<s.length-1;i++) {
             int max = i;
             for(int j=i+1;j<s.length;j++) {
-                if(s[j].getScore(company.getCompanyName())>s[max].getScore(company.getCompanyName())) {
+                if(s[j].getScore(company.getCompanyName())>s[max].getScore(company.getCompanyName()) || s[j].getScore(company.getCompanyName())==s[max].getScore(company.getCompanyName()) && s[j].getCgpa()>s[max].getCgpa()) {
                     max = j;
                 }
             }
