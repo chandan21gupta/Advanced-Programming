@@ -1,7 +1,8 @@
 import java.util.*;
 import java.io.*;
+
 class App {
-	public App() {
+	public App() throws java.io.IOException {
 		Company c = new Company();
 		c.startCompany();
 	}
@@ -9,8 +10,8 @@ class App {
 
 class Company {
 
-	ArrayList<Users> merchants = new ArrayList<Users>();
-	ArrayList<Users> customers = new ArrayList<Users>();
+	private ArrayList<Merchant> merchants = new ArrayList<Merchant>();
+	private ArrayList<Customer> customers = new ArrayList<Customer>();
 
 	public Company() {
 		merchants.add(new Merchant("Jack"));
@@ -26,7 +27,7 @@ class Company {
 		customers.add(new Customer("Aladeen"));
 	}
 
-	void displayCompany() {
+	void displayCompany() throws java.io.IOException {
 		System.out.println("Welcome to Mercury");
 		System.out.println("1) Enter as Merchant");
 		System.out.println("2) Enter as Customer");
@@ -35,37 +36,66 @@ class Company {
 		System.out.println("5) Exit");
 	}
 
-	public void startCompany() {
+	void choose_merchants() {
+		System.out.println("choose merchants");
+		for(Merchant m : merchants) {
+			System.out.println(Integer.toString(m.getCode())+" "+m.getName());
+		}
+	}
+
+	void choose_customers() {
+		System.out.println("choose customers");
+		for(Customer c : customers) {
+			System.out.println(Integer.toString(c.getCode())+" "+c.getName());
+		} 
+	}
+
+	public void startCompany() throws java.io.IOException {
 		displayCompany();
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		int option = Integer.parseInt(buffer.readLine());
 		while(option != 5) {
 			switch(option) {
-				case 1 : 
+				case 1 :
+					choose_merchants();  
 					break;
 				case 2 :
+					choose_customers();
 					break;
 				case 3 :
 					break;
 				case 4 :
 					break;
 				case 5 :
-					break;
+					return;
 			}
+			option = Integer.parseInt(buffer.readLine());
 		}
+		
 	}
 }
 
 class Merchant implements Users {
 
 	static int merchant_count = 0;
-	String name;
-	int code;
+	private String name;
+	private int code;
+
 	Merchant(String name) {
 		merchant_count++;
 		this.name = name;
 		this.code = merchant_count;
 	}	
+
+	String getName() {
+		return this.name;
+	}
+
+	int getCode() {
+		return this.code;
+	}
+
+
 }
 
 class Customer implements Users {
@@ -77,11 +107,20 @@ class Customer implements Users {
 		this.name = name;
 		this.code = customer_count;
 	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public int getCode() {
+		return this.code;
+	}
+	
 }
 
 class Main {
 
-	public static void main(String[] main) throws java.io.IOException{
+	public static void main(String[] main) throws java.io.IOException {
 		App app = new App();
 	}
 }
