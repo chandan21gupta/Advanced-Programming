@@ -1,3 +1,3 @@
 public interface Users {
-	//String get_comb();
+	public void getDetails();
 }
