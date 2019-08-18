@@ -427,6 +427,7 @@ class Merchant implements Users {
 	private final String address;
 	public float total_contribution = 0; 
 	public int slots = 0;
+	public int items_sold = 0;
 	Merchant(String name) {
 		merchant_count++;
 		this.name = name;
@@ -679,6 +680,11 @@ class Customer implements Users {
 	}
 
 	void buy(Item i,int q) {
+		Merchant merchant = Company.merchant_item(i);
+		if(merchant.items_sold>10+merchant.getReward()){
+			System.out.println("not enough resources");
+			return;
+		}
 		float price;
 		if(i.getOffer().equals("buy one get one free")){
 			if(q==1) {
@@ -726,7 +732,7 @@ class Customer implements Users {
 			}
 			orders.add(i);
 			quantities.add(q);
-			Merchant merchant = Company.merchant_item(i);
+			
 			mer.add(merchant);
 			Company.account_balance += 0.005*this.getBalance() + 0.005*price;
 			merchant.total_contribution += 0.005*price;
