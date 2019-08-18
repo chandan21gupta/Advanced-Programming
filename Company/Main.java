@@ -95,7 +95,7 @@ class Company {
 											((Merchant)s1).editItem();
 											break;
 										case 3 :
-											//s1.search_category();
+											s1.search_category();
 											break;
 										case 4 :
 											((Merchant)s1).add_offer();
@@ -112,28 +112,229 @@ class Company {
 								Users s2 = select_merchants(2);
 								System.out.println("Welcome "+((Merchant)s2).getName());
 								s2.choose_option();
+								int option2 = Integer.parseInt(buffer.readLine());
+								while(option2 != 6) {
+									switch(option2) {
+										case 1 :
+											((Merchant)s2).addItem();
+											break;
+										case 2 :
+											((Merchant)s2).editItem();
+											break;
+										case 3 :
+											s2.search_category();
+											break;
+										case 4 :
+											((Merchant)s2).add_offer();
+											break;
+										case 5 : 
+											break;
+									}
+									System.out.println("Welcome "+((Merchant)s2).getName());
+									s2.choose_option();
+									option2 = Integer.parseInt(buffer.readLine());
+								}
 								break;
 							case 3 :
 								Users s3 = select_merchants(3);
 								System.out.println("Welcome "+((Merchant)s3).getName());
 								s3.choose_option();
+								int option3 = Integer.parseInt(buffer.readLine());
+								while(option3 != 6) {
+									switch(option3) {
+										case 1 :
+											((Merchant)s3).addItem();
+											break;
+										case 2 :
+											((Merchant)s3).editItem();
+											break;
+										case 3 :
+											s3.search_category();
+											break;
+										case 4 :
+											((Merchant)s3).add_offer();
+											break;
+										case 5 : 
+											break;
+									}
+									System.out.println("Welcome "+((Merchant)s3).getName());
+									s3.choose_option();
+									option2 = Integer.parseInt(buffer.readLine());
+								}
 								break;
 							case 4 :
 								Users s4 = select_merchants(4);
 								System.out.println("Welcome "+((Merchant)s4).getName());
 								s4.choose_option();
+								int option4 = Integer.parseInt(buffer.readLine());
+								while(option4 != 6) {
+									switch(option4) {
+										case 1 :
+											((Merchant)s4).addItem();
+											break;
+										case 2 :
+											((Merchant)s4).editItem();
+											break;
+										case 3 :
+											s4.search_category();
+											break;
+										case 4 :
+											((Merchant)s4).add_offer();
+											break;
+										case 5 : 
+											break;
+									}
+									System.out.println("Welcome "+((Merchant)s4).getName());
+									s4.choose_option();
+									option4 = Integer.parseInt(buffer.readLine());
+								}
 								break;
 							case 5 :
 								Users s5 = select_merchants(5);
 								System.out.println("Welcome "+((Merchant)s5).getName());
 								s5.choose_option();
+								int option5 = Integer.parseInt(buffer.readLine());
+								while(option5 != 6) {
+									switch(option5) {
+										case 1 :
+											((Merchant)s5).addItem();
+											break;
+										case 2 :
+											((Merchant)s5).editItem();
+											break;
+										case 3 :
+											s5.search_category();
+											break;
+										case 4 :
+											((Merchant)s5).add_offer();
+											break;
+										case 5 : 
+											break;
+									}
+									System.out.println("Welcome "+((Merchant)s5).getName());
+									s5.choose_option();
+									option5 = Integer.parseInt(buffer.readLine());
+								}
 								break;
 						}
+						select_merchants();
 						temp = Integer.parseInt(buffer.readLine());
 					}
 					break;
 				case 2 :
 					select_customers();
+					int temp2 = Integer.parseInt(buffer.readLine());
+					while(temp2 != 6) {
+						switch(temp2) {
+							case 1 :
+								Users c1 = select_customers(1);
+								System.out.println("Welcome "+((Customer)c1).getName());
+								c1.choose_option();
+								int option6 = Integer.parseInt(buffer.readLine());
+								while(option6 != 5) {
+									switch(option6) {
+										case 1 :
+											c1.search_category();
+											break;
+										case 2 :
+											break;
+										case 3 :
+											break;
+										case 4 :
+											break;
+									}
+									System.out.println("Welcome "+((Customer)c1).getName());
+									option6 = Integer.parseInt(buffer.readLine());
+								}
+								break;
+							case 2 :
+								Users c2 = select_customers(2);
+								System.out.println("Welcome "+((Customer)c2).getName());
+								c2.choose_option();
+								int option7 = Integer.parseInt(buffer.readLine());
+								while(option7 != 5) {
+									switch(option7) {
+										case 1 :
+											c2.category_search();
+											break;
+										case 2 :
+											break;
+										case 3 :
+											break;
+										case 4 :
+											break;
+									}
+									System.out.println("Welcome "+((Customer)c2).getName());
+									option7 = Integer.parseInt(buffer.readLine());
+								}
+								break;
+							case 3 :
+								Users c3 = select_customers(3);
+								System.out.println("Welcome "+((Customer)c3).getName());
+								c3.choose_option();
+								int option8 = Integer.parseInt(buffer.readLine());
+								while(option8 != 5) {
+									switch(option8) {
+										case 1 :
+											c3.category_search();
+											break;
+										case 2 :
+											break;
+										case 3 :
+											break;
+										case 4 :
+											break;
+									}
+									System.out.println("Welcome "+((Customer)c3).getName());
+									option8 = Integer.parseInt(buffer.readLine());
+								}
+								break;
+							case 4 :
+								Users c4 = select_customers(4);
+								System.out.println("Welcome "+((Customer)c4).getName());
+								c4.choose_option();
+								int option9 = Integer.parseInt(buffer.readLine());
+								while(option9 != 5) {
+									switch(option9) {
+										case 1 :
+											c4.search_category();
+											break;
+										case 2 :
+											break;
+										case 3 :
+											break;
+										case 4 :
+											break;
+									}
+									System.out.println("Welcome "+((Customer)c4).getName());
+									option9 = Integer.parseInt(buffer.readLine());
+								}
+								break;
+							case 5 :
+								Users c5 = select_customers(5);
+								System.out.println("Welcome "+((Customer)c5).getName());
+								c5.choose_option();
+								int option10 = Integer.parseInt(buffer.readLine());
+								while(option10 != 5) {
+									switch(option10) {
+										case 1 :
+											c5.search_category();
+											break;
+										case 2 :
+											break;
+										case 3 :
+											break;
+										case 4 :
+											break;
+									}
+									System.out.println("Welcome "+((Customer)c5).getName());
+									option10 = Integer.parseInt(buffer.readLine());
+								}
+								break;
+						}
+						select_customers();
+						temp2 = Integer.parseInt(buffer.readLine());
+					}
 					break;
 				case 3 :
 					String[] query = buffer.readLine().split(" ");
@@ -152,6 +353,7 @@ class Company {
 				case 5 :
 					return;
 			}
+			options_display();
 			option = Integer.parseInt(buffer.readLine());
 		}
 	}
@@ -159,7 +361,8 @@ class Company {
 
 class Merchant implements Users {
 	
-	ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<String> categories = new ArrayList<String>();
 
 	static int merchant_count = 0;
 	private int id;
@@ -184,14 +387,29 @@ class Merchant implements Users {
 		System.out.println("6) Exit");
 	}
 	
+	boolean contains(String category) {
+		for(String s : categories) {
+			if(s.equals(category)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	// public void search_category() throws java.io.IOException {
-	// 	BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-	// 	System.out.println("Choose a category");
-		
-	// 	// int choice = Integer.parseInt(buffer.readLine());
-	// 	// items.get(choice).display_item_details();
-	// }
+	public void search_category() throws java.io.IOException {
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Choose a category");
+		for(int i=0;i<categories.size();i++) {
+			System.out.println(i+1 + " "+ categories.get(i));
+		}
+		int option = Integer.parseInt(buffer.readLine());
+		String category = categories.get(option-1);
+		for(Item item : items) {
+			if(item.getCategory().equals(category)){
+				item.display_item_details();
+			}
+		}
+	}
 
 	void add_offer() throws java.io.IOException {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
@@ -262,8 +480,11 @@ class Merchant implements Users {
 		float p = Integer.parseInt(buffer.readLine());
 		System.out.println("item quantity:");
 		int q = Integer.parseInt(buffer.readLine());
-		System.out.println("item cateogry:");
+		System.out.println("item category:");
 		String category = buffer.readLine();
+		if(!contains(category)){
+			categories.add(category);
+		}
 		Item item = new Item(n,p,q,category);
 		if(items.size()<11) {
 			items.add(item);
@@ -303,7 +524,15 @@ class Customer implements Users {
 	}
 
 	public void choose_option() {
+		System.out.println("Customer menu");
+		System.out.println("1) Search item");
+		System.out.println("2) checkout cart");
+		System.out.println("3) Reward won");
+		System.out.println("4) print latest orders");
+	}
 
+	String getName() {
+		return this.name;
 	}
 
 	int getId() {
@@ -330,9 +559,9 @@ class Customer implements Users {
 		this.customer_details();
 	}
 
-	// public void choose_category() {
-
-	// }
+	public void search_category() throws java.io.IOException {
+		
+	}
 
 }
 

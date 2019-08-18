@@ -3,5 +3,5 @@ public interface Users {
 	public void getDetails();
 	public int ID();
 	public void choose_option();
-	//public void search_category();
+	public void search_category() throws java.io.IOException;
 }
