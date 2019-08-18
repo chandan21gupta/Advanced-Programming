@@ -12,7 +12,7 @@ class Company {
 	static public ArrayList<Users> merchants = new ArrayList<Users>();
 	private ArrayList<Users> customers = new ArrayList<Users>();
 	static public ArrayList<String> Categories = new ArrayList<String>();
-	private static float account_balance = 0;
+	static float account_balance = 0;
 
 	Company() throws java.io.IOException {
 		merchants.add(new Merchant("jack"));
@@ -26,6 +26,17 @@ class Company {
 		customers.add(new Customer("bruno"));
 		customers.add(new Customer("borat"));
 		customers.add(new Customer("aladeen"));
+	}
+
+	public static Merchant merchant_item(Item item) {
+		for(Users m : merchants) {
+			for(Item i : ((Merchant)m).getItems()){
+				if(i.getItem_code() == item.getItem_code()){
+					return (Merchant)m;
+				}
+			}
+		}
+		return null;
 	}
 
 	public static boolean category_contains(String category) {
@@ -123,6 +134,7 @@ class Company {
 											((Merchant)s1).add_offer();
 											break;
 										case 5 : 
+											s1.getReward();
 											break;
 									}
 									System.out.println("Welcome "+((Merchant)s1).getName());
@@ -150,6 +162,7 @@ class Company {
 											((Merchant)s2).add_offer();
 											break;
 										case 5 : 
+											s2.getReward();
 											break;
 									}
 									System.out.println("Welcome "+((Merchant)s2).getName());
@@ -177,6 +190,7 @@ class Company {
 											((Merchant)s3).add_offer();
 											break;
 										case 5 : 
+											s3.getReward();
 											break;
 									}
 									System.out.println("Welcome "+((Merchant)s3).getName());
@@ -204,6 +218,7 @@ class Company {
 											((Merchant)s4).add_offer();
 											break;
 										case 5 : 
+											s4.getReward();
 											break;
 									}
 									System.out.println("Welcome "+((Merchant)s4).getName());
@@ -231,6 +246,7 @@ class Company {
 											((Merchant)s5).add_offer();
 											break;
 										case 5 : 
+											s5.getReward();
 											break;
 									}
 									System.out.println("Welcome "+((Merchant)s5).getName());
@@ -259,8 +275,10 @@ class Company {
 											c1.search_category();
 											break;
 										case 2 :
+											((Customer)c1).checkout();
 											break;
 										case 3 :
+											c1.getReward();
 											break;
 										case 4 :
 											((Customer)c1).recent_orders();
@@ -282,10 +300,13 @@ class Company {
 											c2.search_category();
 											break;
 										case 2 :
+											((Customer)c2).checkout();
 											break;
 										case 3 :
+										c2.getReward();
 											break;
 										case 4 :
+											((Customer)c2).recent_orders();
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c2).getName());
@@ -303,11 +324,14 @@ class Company {
 										case 1 :
 											c3.search_category();
 											break;
-										case 2 :
+										case 2 :	
+											((Customer)c3).checkout();
 											break;
 										case 3 :
+											c3.getReward();
 											break;
 										case 4 :
+											((Customer)c3).recent_orders();
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c3).getName());
@@ -326,10 +350,13 @@ class Company {
 											c4.search_category();
 											break;
 										case 2 :
+											((Customer)c4).checkout();
 											break;
 										case 3 :
+											c4.getReward();
 											break;
 										case 4 :
+											((Customer)c4).recent_orders();
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c4).getName());
@@ -348,10 +375,13 @@ class Company {
 											c5.search_category();
 											break;
 										case 2 :
+											((Customer)c5).checkout();
 											break;
 										case 3 :
+											c5.getReward();
 											break;
 										case 4 :
+											((Customer)c5).recent_orders();
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c5).getName());
@@ -391,13 +421,12 @@ class Merchant implements Users {
 	
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ArrayList<String> categories = new ArrayList<String>();
-
 	static int merchant_count = 0;
 	private int id;
 	private final String name;
 	private final String address;
-	static float total_contribution = 0; 
-
+	public float total_contribution = 0; 
+	public int slots = 0;
 	Merchant(String name) {
 		merchant_count++;
 		this.name = name;
@@ -407,6 +436,10 @@ class Merchant implements Users {
 
 	ArrayList<Item> getItems() {
 		return this.items;
+	}
+
+	public int getReward() {
+		return this.slots;
 	}
 
 	public void choose_option() {
@@ -521,9 +554,7 @@ class Merchant implements Users {
 			Company.Categories.add(category);
 		}
 		Item item = new Item(n,p,q,category);
-		if(items.size()<11) {
-			items.add(item);
-		}
+		items.add(item);
 		item.display_item_details();
 	}
 	
@@ -545,21 +576,26 @@ class Merchant implements Users {
 class Customer implements Users {
 
 	static int customers_count = 0;
-	//static int orders = 0;
+	public int order = 0;
 	static private ArrayList<Item> orders = new ArrayList<Item>();
 	static private ArrayList<Integer> quantities = new ArrayList<Integer>();
 	static private ArrayList<Integer> quantities_cart = new ArrayList<Integer>();
 	static private ArrayList<Item> cart = new ArrayList<Item>();
+	static private ArrayList<Merchant> mer = new ArrayList<Merchant>();
 	private final String name;
 	private final int id;
 	private final String address;
-	private static float customer_balance = 100;
-
+	public float customer_balance = 100;
+	public int reward = 0;
 	Customer(String name) {
 		customers_count++;
 		this.name = name;
 		this.id = customers_count;
 		this.address = "";
+	}
+
+	public int getReward() {
+		return this.reward;
 	}
 
 	public void choose_option() {
@@ -630,13 +666,7 @@ class Customer implements Users {
 		System.out.println("3) Exit");
 		int option = Integer.parseInt(buffer.readLine());
 		if(option == 1) {
-			if(i.get(choice-1).getQuantity()>=q && this.getBalance()>=i.get(choice-1).getPrice()*q) {
-				i.get(choice-1).setQuantity(i.get(choice-1).getQuantity()-q);
-				this.setBalance(this.getBalance()-i.get(choice-1).getPrice()*q);
-				orders.add(i.get(choice-1));
-				quantities.add(q);
-				System.out.println("Item Successfully bought");
-			}
+			buy(i.get(choice-1),q);
 		}	
 		else if(option == 2) {
 			cart.add(i.get(choice-1));
@@ -648,12 +678,85 @@ class Customer implements Users {
 		}
 	}
 
+	void buy(Item i,int q) {
+		float price;
+		if(i.getOffer().equals("buy one get one free")){
+			if(q==1) {
+				price = i.getPrice();
+			}
+			else{
+				price = (q/2)*i.getPrice();
+			}
+		}
+		else if(i.getOffer().equals("25% off")) {
+			price = ((float)0.75)*q*i.getPrice();
+		}
+		else{
+			price = q*i.getPrice();
+		}
+		float spent;
+		int flag;
+		if(this.getBalance()>=price){
+			flag = 1;
+			spent = this.getBalance();
+		}
+		else if(this.getBalance()+this.getReward()>=price) {
+			flag = 2;
+			spent = this.getBalance()+this.getReward();
+		}
+		else if(this.getReward()>=price) {
+			flag = 3;
+			spent = this.getReward();
+		}
+		else{
+			flag = 0;
+			spent = -1;
+		}
+		if(i.getQuantity()>=q && spent>0) {
+			i.setQuantity(i.getQuantity()-q);
+			if(flag == 1) {
+				this.setBalance(this.getBalance()-price);
+			}
+			else if(flag == 2) {
+				this.reward -= (price-this.getBalance());
+				this.setBalance(0);
+			}
+			else if(flag == 3) {
+				this.reward -= price;
+			}
+			orders.add(i);
+			quantities.add(q);
+			Merchant merchant = Company.merchant_item(i);
+			mer.add(merchant);
+			Company.account_balance += 0.005*this.getBalance() + 0.005*price;
+			merchant.total_contribution += 0.005*price;
+			if(merchant.total_contribution>0 && merchant.total_contribution%100 == 0){
+				merchant.slots++;
+			}
+			this.order++;
+			if(this.order>0 && this.order%5 == 0) {
+				this.reward+=10;
+			}
+			System.out.println("Item Successfully bought");
+		}
+		else{
+			System.out.println("Not enough resources");
+		}
+	}
+
+	void checkout() {
+		int i = 0;
+		while(i<cart.size()) {
+			buy(cart.get(i),quantities_cart.get(i));
+		}
+	}
+
 	void recent_orders() {
 		int i = this.orders.size()-1;
 		int k = 10;
 		while(i>=0 && k>0) {
 			System.out.print("Bought item ");
-			System.out.print(orders.get(i).getName()+" "+quantities.get(i)+"for Rs"+orders.get(i).getPrice()*quantities.get(i)+"from");
+			System.out.println(orders.get(i).getName()+" "+quantities.get(i)+" for Rs "+orders.get(i).getPrice()*quantities.get(i)+" from "+mer.get(i).getName());
 			k--;
 			i--;
 		}
@@ -702,6 +805,10 @@ class Item {
 
 	int getItem_code() {
 		return this.item_code;
+	}
+
+	String getOffer() {
+		return this.offer;
 	}
 
 	void setOffer(String offer) {
