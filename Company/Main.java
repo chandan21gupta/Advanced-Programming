@@ -9,8 +9,9 @@ class App {
 }
 
 class Company {
-	private ArrayList<Users> merchants = new ArrayList<Users>();
+	static public ArrayList<Users> merchants = new ArrayList<Users>();
 	private ArrayList<Users> customers = new ArrayList<Users>();
+	static public ArrayList<String> Categories = new ArrayList<String>();
 	private static float account_balance = 0;
 
 	Company() throws java.io.IOException {
@@ -25,6 +26,27 @@ class Company {
 		customers.add(new Customer("bruno"));
 		customers.add(new Customer("borat"));
 		customers.add(new Customer("aladeen"));
+	}
+
+	public static boolean category_contains(String category) {
+		for(String s : Categories) {
+			if(s.equals(category)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static ArrayList<Item> display_merchant_items (String category) throws java.io.IOException {
+		ArrayList<Item> i = new ArrayList<Item>();
+		for(Users m : merchants) {
+			for(Item item : ((Merchant)m).getItems()) {
+				if(item.getCategory().equals(category)) {
+					i.add(item);					
+				}
+			}
+		}
+		return i;
 	}
 
 	float getBalance() {
@@ -79,7 +101,7 @@ class Company {
 				case 1 : 
 					select_merchants();
 					int temp = Integer.parseInt(buffer.readLine());
-					while(temp != 5){
+					while(temp != 6){
 						switch(temp) {
 							case 1 : 
 								Users s1 = select_merchants(1);
@@ -241,9 +263,11 @@ class Company {
 										case 3 :
 											break;
 										case 4 :
+											((Customer)c1).recent_orders();
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c1).getName());
+									c1.choose_option();
 									option6 = Integer.parseInt(buffer.readLine());
 								}
 								break;
@@ -255,7 +279,7 @@ class Company {
 								while(option7 != 5) {
 									switch(option7) {
 										case 1 :
-											c2.category_search();
+											c2.search_category();
 											break;
 										case 2 :
 											break;
@@ -265,6 +289,7 @@ class Company {
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c2).getName());
+									c2.choose_option();
 									option7 = Integer.parseInt(buffer.readLine());
 								}
 								break;
@@ -276,7 +301,7 @@ class Company {
 								while(option8 != 5) {
 									switch(option8) {
 										case 1 :
-											c3.category_search();
+											c3.search_category();
 											break;
 										case 2 :
 											break;
@@ -286,6 +311,7 @@ class Company {
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c3).getName());
+									c3.choose_option();
 									option8 = Integer.parseInt(buffer.readLine());
 								}
 								break;
@@ -307,6 +333,7 @@ class Company {
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c4).getName());
+									c4.choose_option();
 									option9 = Integer.parseInt(buffer.readLine());
 								}
 								break;
@@ -328,6 +355,7 @@ class Company {
 											break;
 									}
 									System.out.println("Welcome "+((Customer)c5).getName());
+									c5.choose_option();
 									option10 = Integer.parseInt(buffer.readLine());
 								}
 								break;
@@ -375,6 +403,10 @@ class Merchant implements Users {
 		this.name = name;
 		this.id = merchant_count;
 		this.address = "";
+	}
+
+	ArrayList<Item> getItems() {
+		return this.items;
 	}
 
 	public void choose_option() {
@@ -485,6 +517,9 @@ class Merchant implements Users {
 		if(!contains(category)){
 			categories.add(category);
 		}
+		if(!Company.category_contains(category)) {
+			Company.Categories.add(category);
+		}
 		Item item = new Item(n,p,q,category);
 		if(items.size()<11) {
 			items.add(item);
@@ -510,11 +545,15 @@ class Merchant implements Users {
 class Customer implements Users {
 
 	static int customers_count = 0;
-	static int orders = 0;
+	//static int orders = 0;
+	static private ArrayList<Item> orders = new ArrayList<Item>();
+	static private ArrayList<Integer> quantities = new ArrayList<Integer>();
+	static private ArrayList<Integer> quantities_cart = new ArrayList<Integer>();
+	static private ArrayList<Item> cart = new ArrayList<Item>();
 	private final String name;
 	private final int id;
 	private final String address;
-
+	private static float customer_balance = 100;
 
 	Customer(String name) {
 		customers_count++;
@@ -529,6 +568,15 @@ class Customer implements Users {
 		System.out.println("2) checkout cart");
 		System.out.println("3) Reward won");
 		System.out.println("4) print latest orders");
+		System.out.println("5) Exit");
+	}
+
+	void setBalance(float p) {
+		this.customer_balance = p;
+	}
+
+	float getBalance() {
+		return this.customer_balance;
 	}
 
 	String getName() {
@@ -560,7 +608,55 @@ class Customer implements Users {
 	}
 
 	public void search_category() throws java.io.IOException {
-		
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("choose a category");
+		for(int i=0;i<Company.Categories.size();i++) {
+			System.out.println(i+1+" "+Company.Categories.get(i));
+		}
+		int choice = Integer.parseInt(buffer.readLine());
+		String category = Company.Categories.get(choice-1);
+		ArrayList<Item> i = Company.display_merchant_items(category);
+		System.out.println("choose item by code");
+		for(Item item : i) {
+			item.display_item_details();
+		}
+		System.out.println("Enter item code");
+		choice = Integer.parseInt(buffer.readLine());
+		System.out.println("Enter item quantity");
+		int q = Integer.parseInt(buffer.readLine());
+		System.out.println("Choose method of abstraction");
+		System.out.println("1) Buy item");
+		System.out.println("2) Add item to cart");
+		System.out.println("3) Exit");
+		int option = Integer.parseInt(buffer.readLine());
+		if(option == 1) {
+			if(i.get(choice-1).getQuantity()>=q && this.getBalance()>=i.get(choice-1).getPrice()*q) {
+				i.get(choice-1).setQuantity(i.get(choice-1).getQuantity()-q);
+				this.setBalance(this.getBalance()-i.get(choice-1).getPrice()*q);
+				orders.add(i.get(choice-1));
+				quantities.add(q);
+				System.out.println("Item Successfully bought");
+			}
+		}	
+		else if(option == 2) {
+			cart.add(i.get(choice-1));
+			quantities_cart.add(q);
+			System.out.println("Successfully added to cart");
+		}
+		else{
+			return;
+		}
+	}
+
+	void recent_orders() {
+		int i = this.orders.size()-1;
+		int k = 10;
+		while(i>=0 && k>0) {
+			System.out.print("Bought item ");
+			System.out.print(orders.get(i).getName()+" "+quantities.get(i)+"for Rs"+orders.get(i).getPrice()*quantities.get(i)+"from");
+			k--;
+			i--;
+		}
 	}
 
 }
@@ -582,6 +678,22 @@ class Item {
 		this.quantity = quantity;
 		this.category = category;
 		this.offer = "None";
+	}
+
+	String getName() {
+		return this.name;
+	}
+
+	float getPrice() {
+		return this.price;
+	}
+
+	void setQuantity(int p) {
+		this.quantity = p;
+	}
+
+	int getQuantity() {
+		return this.quantity;
 	}
 
 	String getCategory() {
@@ -611,7 +723,6 @@ class Item {
 		this.quantity = q;
 		this.display_item_details();
 	}
-
 }
 
 class Main {
