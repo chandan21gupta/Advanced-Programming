@@ -14,7 +14,7 @@ class Game {
 	final private int _trampolines_moves;
 	final private int _vultures_moves;
 	final private int _white_moves;
-	final private String _name;
+	private String _name;
 
 	Game() throws java.io.IOException {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
@@ -90,20 +90,45 @@ class Game {
 	void EnterPlayer() throws java.io.IOException {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Enter the Player Name");
-		this._name = buffer.readLine();
-		System.out.println("Starting the game with "+name+" at Tile-1");
-		System.out.println("Control transferred to Computer transfer to Computer for rolling the Dice for "+name);
+		_name = buffer.readLine();
+		System.out.println("Starting the game with "+_name+" at Tile-1");
+		System.out.println("Control transferred to Computer transfer to Computer for rolling the Dice for "+_name);
 		System.out.println("Hit enter to start the game");
 		String n = buffer.readLine();
 		StartGame();
 	}
 
 	void StartGame() {
-		int tile_number = 0;
+		Random random = new Random();
+		int tile_number = 1;
+		int count = 1;
 		while(tile_number != _tiles.size()) {
-			
-		}
+			int dice_roll = 1+random.nextInt(6);
+			if(tile_number == 1 && dice_roll != 6) {
+				System.out.println("[Roll-"+count+"] "+_name+" rolled at "+dice_roll+" at Tile-1, OOPs you need 6 to start");
+			}
 
+			else if(tile_number == 1 && dice_roll == 6) {
+				System.out.println("[Roll-"+count+"] "+_name+" rolled at "+dice_roll+" at Tile-1. You are out of the cage! You get a free roll.");
+				dice_roll = 1+random.nextInt();
+				count++;
+				System.out.print("[Roll-"+count+"] "+_name+" rolled at "+dice_roll+" at Tile-"+tile_number+", landed on Tile ");
+				tile_number+=dice_roll;
+				System.out.print(tile_number);
+				System.out.println("Trying to shake the Tile-"+tile_number);
+				_tiles.get(tile_number-1).shake();			
+			}
+
+			else {
+				System.out.print("[Roll-"+count+"] "+_name+" rolled at "+dice_roll+" at Tile-"+tile_number+", landed on Tile ");
+				tile_number+=dice_roll;
+				System.out.print(tile_number);
+				System.out.println("Trying to shake the Tile-"+tile_number);
+				_tiles.get(tile_number-1).shake();
+			}
+
+			count++;
+		}
 	}
 }
 
@@ -121,12 +146,20 @@ class Snake extends Tile implements GenericTile {
 	Snake(int moves) {
 		super(moves);
 	}
+
+	public void shake() {
+
+	}
 }
 
 class Vulture extends Tile implements GenericTile {
 	
 	Vulture(int moves) {
 		super(moves);
+	}
+
+	public void shake() {
+
 	}
 }
 
@@ -135,6 +168,10 @@ class Cricket extends Tile implements GenericTile {
 	Cricket(int moves) {
 		super(moves);
 	}
+
+	public void shake() {
+
+	}
 }
 
 class Trampoline extends Tile implements GenericTile {
@@ -142,12 +179,20 @@ class Trampoline extends Tile implements GenericTile {
 	Trampoline(int moves) {
 		super(moves);
 	}
+
+	public void shake() {
+
+	}
 }
 
 class White extends Tile implements GenericTile {
 	
 	White(int moves) {
 		super(moves);
+	}
+
+	public void shake() {
+
 	}
 }
 
