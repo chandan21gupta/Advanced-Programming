@@ -16,13 +16,23 @@ class Game {
 	final private int _white_moves;
 	private String _name;
 
-	Game() throws java.io.IOException {
+	Game() throws Exception {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Enter total number of tiles on the race track(length)");
-		int n = Integer.parseInt(buffer.readLine());
-		_tiles = new ArrayList<GenericTile>(n);
-		System.out.println("Setting up the race track...");
-
+		Boolean done = false;
+		int n = 0;
+		while(!done){
+			try {
+				System.out.println("Enter total number of tiles on the race track(length)");
+				n = Integer.parseInt(buffer.readLine());
+				_tiles = new ArrayList<GenericTile>(n);
+				System.out.println("Setting up the race track...");
+				done = true;
+			}
+			catch(NumberFormatException e) {
+				System.out.println("The user should enter an integer number");
+				System.out.println("Please enter again");
+			}
+		}
 		for(int i=0;i<n;i++) {
 			_tiles.add(null);
 		}
@@ -91,7 +101,7 @@ class Game {
 		}
 	}
 
-	void EnterPlayer() throws java.io.IOException {
+	void EnterPlayer() throws Exception {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Enter the Player Name");
 		_name = buffer.readLine();
@@ -102,11 +112,11 @@ class Game {
 		StartGame();
 	}
 
-	void StartGame() {
+	void StartGame() throws Exception {
 		Random random = new Random();
 		int tile_number = 1;
 		int count = 1;
-		while(tile_number <= _tiles.size()) {
+		while(tile_number < _tiles.size()) {
 			int dice_roll = 1+random.nextInt(6);
 			if(tile_number == 1 && dice_roll != 6) {
 				System.out.println("[Roll-"+count+"] "+_name+" rolled at "+dice_roll+" at Tile-1, OOPs you need 6 to start");
@@ -137,27 +147,35 @@ class Game {
 				System.out.print("[Roll-"+count+"] "+_name+" rolled at "+dice_roll+" at Tile-"+tile_number+", landed on Tile ");
 				tile_number+=dice_roll;
 				System.out.println(tile_number);
-				System.out.println("Trying to shake the Tile-"+tile_number);
-				_tiles.get(tile_number-1).shake();
-				int penalty = _tiles.get(tile_number-1).getmoves();
-				tile_number = tile_number - penalty;
-				if(tile_number<=0) {
-					System.out.println(_name+" moved to Tile 1 as it cant go back further.");
-					tile_number = 1;
+				try {
+					if(tile_number >= _tiles.size()) {
+						throw new GameWinnerException(_name+" wins the race "+count+" rolls");
+					}
+					System.out.println("Trying to shake the Tile-"+tile_number);
+					_tiles.get(tile_number-1).shake();
+					int penalty = _tiles.get(tile_number-1).getmoves();
+					tile_number = tile_number - penalty;
+					if(tile_number<=0) {
+						System.out.println(_name+" moved to Tile 1 as it cant go back further.");
+						tile_number = 1;
+					}
+					else {
+						System.out.println(_name+" moved to Tile-"+tile_number);
+					}
 				}
-				else {
-					System.out.println(_name+" moved to Tile-"+tile_number);
+				catch(GameWinnerException e) {
+					System.out.println(e.getMessage());
+					System.out.println("Total Snake Bites="+Snake.bites);
+					System.out.println("Total Vulture Bites="+Vulture.bites);
+					System.out.println("Total Cricket Bites="+Cricket.bites);
+					System.out.println("Total Trampolines="+Trampoline.bites);
+				}
+				finally {
+					count++;
 				}
 
 			}
-			count++;
 		}
-
-		System.out.println(_name+" wins the race "+count+" rolls");
-		System.out.println("Total Snake Bites="+Snake.bites);
-		System.out.println("Total Vulture Bites="+Vulture.bites);
-		System.out.println("Total Cricket Bites="+Cricket.bites);
-		System.out.println("Total Trampolines="+Trampoline.bites);
 	}
 }
 
@@ -188,9 +206,14 @@ class Snake extends Tile implements GenericTile {
 	}
 
 	@Override
-	public void shake() {
-		System.out.println("Hiss...! I am a Snake, you go back "+getmoves()+" tiles");
-		bites++;
+	public void shake() throws SnakeBiteException {
+		try {
+			bites++;
+			throw new SnakeBiteException("Hiss...! I am a Snake, you go back "+getmoves()+" tiles");
+		}
+		catch (SnakeBiteException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
 
@@ -208,9 +231,15 @@ class Vulture extends Tile implements GenericTile {
 	}
 
 	@Override
-	public void shake() {
-		System.out.println("Yapping...! I am a Vulture, you go back "+getmoves()+" tiles");
-		bites++;
+	public void shake() throws VultureBiteException {
+		
+		try {
+			bites++;
+			throw new VultureBiteException("Yapping...! I am a Vulture, you go back "+getmoves()+" tiles");
+		}
+		catch(VultureBiteException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
 
@@ -228,9 +257,15 @@ class Cricket extends Tile implements GenericTile {
 	}
 
 	@Override
-	public void shake() {
-		System.out.println("Chirp...! I am a Cricket, you go back "+getmoves()+" tiles");
-		bites++;
+	public void shake() throws CricketBiteException {
+		try {
+			bites++;
+			throw new CricketBiteException("Chirp...! I am a Cricket, you go back "+getmoves()+" tiles");
+		}
+
+		catch(CricketBiteException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
 
@@ -248,9 +283,14 @@ class Trampoline extends Tile implements GenericTile {
 	}
 
 	@Override
-	public void shake() {
-		System.out.println("Ping-Pong! I am a Trampoline, you advance "+getmoves()+" tiles");
-		bites++;
+	public void shake() throws TrampolineException {
+		try {
+			bites++;
+			throw new TrampolineException("Ping-Pong! I am a Trampoline, you advance "+getmoves()+" tiles");
+		}
+		catch(TrampolineException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
 
@@ -271,8 +311,38 @@ class White extends Tile implements GenericTile {
 	}
 }
 
+class GameWinnerException extends Exception {
+	public GameWinnerException(String message) {
+		super(message);
+	}
+ }
+
+class SnakeBiteException extends Exception {
+	public SnakeBiteException(String message) {
+		super(message);
+	}
+}
+
+class CricketBiteException extends Exception {
+	public CricketBiteException(String message) {
+		super(message);
+	}
+}
+
+class VultureBiteException extends Exception {
+	public VultureBiteException(String message) {
+		super(message);
+	}
+}
+
+class TrampolineException extends Exception {
+	public TrampolineException(String message) {
+		super(message);
+	}
+}
+
 class Main {
-	public static void main(String[] args) throws java.io.IOException {
+	public static void main(String[] args) throws Exception {
 		Game game = new Game();
 	}
 }

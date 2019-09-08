@@ -1,6 +1,6 @@
 public interface GenericTile {
 	
-	public void shake();
+	public void shake() throws Exception;
 	public int getmoves();
 
 }
