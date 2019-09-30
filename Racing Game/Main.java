@@ -4,8 +4,7 @@ import java.io.*;
 class Game {
 
 	//private ArrayList<String> _users;
-	private static User current;
-
+	private User current;
 	Game(String user_name) throws java.io.IOException,Exception {
 		loadgame(user_name);
 	}
@@ -34,20 +33,19 @@ class Game {
 		}
 	}
 
-	public static void saveGame() {
+	public static void saveGame(User u) {
 		try {
-			if(current != null){
-				FileOutputStream file = new FileOutputStream(current.getName()+".ser");
-				ObjectOutputStream out = new ObjectOutputStream(file);
+			
+			FileOutputStream file = new FileOutputStream(u.getName()+".ser");
+			ObjectOutputStream out = new ObjectOutputStream(file);
 
-				out.writeObject(current);
+			out.writeObject(u);
 
-				out.close();
-				file.close();
+			out.close();
+			file.close();
 
-				System.out.println("Game has been saved succesfully!!!");
-			}
-	}
+			System.out.println("Game has been saved succesfully!!!");
+		}
 
 		catch(IOException e) {
 			System.out.println("IOException caught!!!");
@@ -75,9 +73,10 @@ class User_Game implements Serializable {
 	private GenericTile checkpoint_2;
 	private GenericTile checkpoint_3;
 	private GenericTile checkpoint;
+	private User _u;
 
-	User_Game() throws java.io.IOException {
-
+	User_Game(User u) throws java.io.IOException {
+		_u = u;
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		Boolean done = false;
 		while(!done){
@@ -273,7 +272,7 @@ class User_Game implements Serializable {
 					System.out.println("Press 1 to save the game or 2 to continue...");
 					int op = Integer.parseInt(buffer.readLine());
 					if(op == 1) {
-						Game.saveGame();
+						Game.saveGame(_u);
 						return;
 					}
 				}
@@ -287,7 +286,7 @@ class User implements Serializable {
 	private final String _name;
 	
 	User() throws java.io.IOException,Exception {
-		_game = new User_Game();
+		_game = new User_Game(this);
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Enter the Player Name");
 		_name = buffer.readLine();
@@ -298,7 +297,7 @@ class User implements Serializable {
 	}
 
 	User(String name) throws java.io.IOException,Exception {
-		_game = new User_Game();
+		_game = new User_Game(this);
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		//System.out.println("Enter the Player Name");
 		_name = name;
