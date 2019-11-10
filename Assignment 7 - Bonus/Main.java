@@ -1,11 +1,11 @@
 import java.io.*;
 import java.util.*;
 
-class Fionacchi {
+class Fibonaachi {
 
 	Producer producer;
 
-	public Fibonaachi() {
+	public Fibonaachi() throws java.io.IOException {
 		producer = new Producer();
 		Thread prod = new Thread(producer);
 		prod.start();
@@ -13,14 +13,14 @@ class Fionacchi {
 
 }
 
-class Producer extends Thread {
+class Producer implements Runnable {
 	final private int consumers;
-	private ArrayList<Consumer> consumer_threads = new ArrayList<Consumer>(); 
+	private ArrayList<Thread> consumer_threads = new ArrayList<Thread>(); 
 	Producer() throws java.io.IOException {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		this.consumers = Integer.parseInt(buffer.readLine());
 		for(int i=0;i<this.consumers; i++) {
-			this.consumer_threads.add(new Thread(new Consumer));
+			this.consumer_threads.add(new Thread(new Consumer()));
 		}
 	}
 
@@ -30,13 +30,17 @@ class Producer extends Thread {
 	}
 }
 
-class Consumer {
+class Consumer implements Runnable {
 
+	@Override
+	public void run() {
+
+	}
 }
 
 class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws java.io.IOException {
 		Fibonaachi fibo = new Fibonaachi();
 	}
 }
